@@ -11,7 +11,7 @@ import pygame
 from pygame.locals import *
 
 
-FPS = 60
+FPS = 120
 ANIMATION_SPEED = 0.18  # pixels per millisecond
 WIN_WIDTH = 284 * 2     # BG image size: 284x512 px; tiled twice
 WIN_HEIGHT = 512
@@ -46,7 +46,7 @@ class Bird(pygame.sprite.Sprite):
     WIDTH = HEIGHT = 32
     SINK_SPEED = 0.18
     CLIMB_SPEED = 0.3
-    CLIMB_DURATION = 333.3
+    CLIMB_DURATION = 300
 
     def __init__(self, x, y, msec_to_climb, images):
         """Initialise a new Bird instance.
@@ -343,12 +343,12 @@ def main():
             pipes.append(pp)
 
         for e in pygame.event.get():
-            if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
+            if e.type == QUIT or (e.type == KEYDOWN and e.key == K_ESCAPE):
                 done = True
                 break
-            elif e.type == KEYUP and e.key in (K_PAUSE, K_p):
+            elif e.type == KEYDOWN and e.key in (K_PAUSE, K_p):
                 paused = not paused
-            elif e.type == MOUSEBUTTONUP or (e.type == KEYUP and
+            elif e.type == MOUSEBUTTONUP or (e.type == KEYDOWN and
                     e.key in (K_UP, K_RETURN, K_SPACE)):
                 bird.msec_to_climb = Bird.CLIMB_DURATION
 
