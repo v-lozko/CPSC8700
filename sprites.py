@@ -36,6 +36,9 @@ class Witch(pygame.sprite.Sprite):
         self.gravity = 600
         self.direction = 0
 
+        #mask
+        self.mask = pygame.mask.from_surface(self.image)
+
     def apply_gravity (self, delta_time):
         self.direction += self.gravity * delta_time
         self.pos.y += self.direction * delta_time
@@ -61,16 +64,19 @@ class Obstacle(pygame.sprite.Sprite):
 
         orientation = choice(('up', 'down'))
 
-        self.image = pygame.image.load('game_images/tree.png').convert_alpha()
         x = WINDOW_WIDTH + randint(100,200)
         if orientation == 'up':
+            self.image = pygame.image.load('game_images/tree.png').convert_alpha()
             y = WINDOW_HEIGHT + randint(10, 50)
             self.rect = self.image.get_rect(midbottom = (x, WINDOW_HEIGHT) )
         else:
+            self.image = pygame.image.load('game_images/bats.png').convert_alpha()
             y = randint(-50, -10)
-            self.image = pygame.transform.flip(self.image, False, True)
             self.rect = self.image.get_rect(midtop = (x,y))
         self.pos = pygame.math.Vector2(self.rect.topleft)
+
+        #mask
+        self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, delta_time):
         self.pos.x -= 400 * delta_time
