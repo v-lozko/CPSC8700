@@ -62,7 +62,7 @@ class Obstacle(pygame.sprite.Sprite):
         orientation = choice(('up', 'down'))
 
         self.image = pygame.image.load('game_images/tree.png').convert_alpha()
-        x = WINDOW_WIDTH + randint(40,100)
+        x = WINDOW_WIDTH + randint(100,200)
         if orientation == 'up':
             y = WINDOW_HEIGHT + randint(10, 50)
             self.rect = self.image.get_rect(midbottom = (x, WINDOW_HEIGHT) )
