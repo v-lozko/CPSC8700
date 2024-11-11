@@ -1,5 +1,5 @@
 import pygame, sys, time
-from sprites import Background, Witch
+from sprites import Background, Witch, Obstacle
 import settings
 
 
@@ -18,6 +18,10 @@ class Game:
         Background(self.all_sprites)
         self.witch = Witch(self.all_sprites)
 
+        #timer
+        self.obstacle_timer = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.obstacle_timer, 1400)
+
     def run(self):
         last_time = time.time()
         while True:
@@ -31,6 +35,8 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self.witch.move_up()
+                if event.type == self.obstacle_timer:
+                    Obstacle(self.all_sprites)
 
 
             #game logic

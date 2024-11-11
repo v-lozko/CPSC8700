@@ -2,6 +2,9 @@ import pygame
 import settings
 from random import choice, randint
 
+from settings import WINDOW_WIDTH, WINDOW_HEIGHT
+
+
 class Background(pygame.sprite.Sprite):
     def __init__(self, groups):
         super().__init__(groups)
@@ -41,8 +44,36 @@ class Witch(pygame.sprite.Sprite):
     def move_up(self):
         self.direction = -400
 
+    #isn't working properly for some reason
+    #def rotate(self):
+        #rotated_witch = pygame.transform.rotozoom(self.image.copy(),-self.direction*0.0006,1)
+       # self.image = rotated_witch
+        #self.rect = self.image.get_rect(center=(self.rect.centerx, self.rect.centery))
+
 
     def update (self, delta_time):
         self.apply_gravity(delta_time)
-        #self.animate(delta_time)
-        #self.rotate(delta_time)
+        #self.rotate()
+
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self, groups):
+        super().__init__(groups)
+
+        orientation = choice(('up', 'down'))
+
+        self.image = pygame.image.load('game_images/tree.png').convert_alpha()
+        x = WINDOW_WIDTH + randint(40,100)
+        if orientation == 'up':
+            y = WINDOW_HEIGHT + randint(10, 50)
+            self.rect = self.image.get_rect(midbottom = (x, WINDOW_HEIGHT) )
+        else:
+            y = randint(-50, -10)
+            self.image = pygame.transform.flip(self.image, False, True)
+            self.rect = self.image.get_rect(midtop = (x,y))
+        self.pos = pygame.math.Vector2(self.rect.topleft)
+
+    def update(self, delta_time):
+        self.pos.x -= 400 * delta_time
+        self.rect.x = round(self.pos.x)
+        if self.rect.right <= -20:
+                self.kill()
