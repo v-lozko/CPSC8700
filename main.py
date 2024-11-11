@@ -7,7 +7,7 @@ class Game:
     def __init__(self):
         pygame.init() #initializes all t he pygame modules
         self.display_surface = pygame.display.set_mode((settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT))
-        pygame.display.set_caption('Tis The Seasons')
+        pygame.display.set_caption('Flying Through the Seasons')
         self.clock = pygame.time.Clock()
         self.active = True
 
@@ -66,6 +66,7 @@ class Game:
                         if self.active:
                             self.witch.move_up()
                         else:
+                            self.witch.kill()
                             self.witch = Witch(self.all_sprites)
                             self.active = True
                             self.start_offset = pygame.time.get_ticks()
