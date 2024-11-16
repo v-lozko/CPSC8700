@@ -7,22 +7,22 @@ class SpriteFactory:
     def __init__(self):
         self.holiday_sprites = {
             "Halloween": {
-                "background": 'game_images/thanksgiving.png',
-                "flyer": 'game_images/turkey_scaled.png',
-                "obstacle_top": 'game_images/tg_tree3.png',
-                "obstacle_bottom": 'game_images/bats.png',
+                "background": 'game_images/background.png',
+                "flyer": 'game_images/witch_scaled.png',
+                "obstacle_bottom": 'game_images/tree.png',
+                "obstacle_top": 'game_images/bats.png',
             },
             "Thanksgiving": {
-                "background": 'game_images/thanksgiving.png',
-                "flyer": 'game_images/turkey_scaled.png',
-                "obstacle_top": 'game_images/tg_tree3.png',
-                "obstacle_bottom": 'game_images/bats.png',
+                "background": 'game_images/th_bg2.png',
+                "flyer": 'game_images/wc_turkey_scaled.png',
+                "obstacle_bottom": 'game_images/t2.png',
+                "obstacle_top": 'game_images/tg_top2.png',
             },
             "Christmas": {
                 "background": 'game_images/thanksgiving.png',
                 "flyer": 'game_images/turkey_scaled.png',
-                "obstacle_top": 'game_images/tg_tree3.png',
-                "obstacle_bottom": 'game_images/bats.png',
+                "obstacle_bottom": 'game_images/tg_tree3.png',
+                "obstacle_top": 'game_images/bats.png',
             }
         }
 

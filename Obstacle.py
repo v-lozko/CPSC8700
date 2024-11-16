@@ -7,7 +7,7 @@ class Obstacle(pygame.sprite.Sprite):
         super().__init__(groups)
         x = settings.WINDOW_WIDTH + randint(100,200)
         self.image = pygame.image.load(obstacle_image).convert_alpha()
-        if location == 'top':
+        if location == 'bottom':
             self.rect = self.image.get_rect(midbottom = (x, settings.WINDOW_HEIGHT) )
         else:
             y = randint(-50, -10)
