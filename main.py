@@ -1,23 +1,31 @@
 import pygame, sys, time
-from sprites import Background, Witch, Obstacle
+from sprites import SpriteFactory
 import settings
+import menu
 
 
 class Game:
     def __init__(self):
-        pygame.init() #initializes all t he pygame modules
+        pygame.init() #initializes all the pygame modules
         self.display_surface = pygame.display.set_mode((settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT))
-        pygame.display.set_caption('Flying Through the Seasons')
+        pygame.display.set_caption('Flying Through the Holidays')
         self.clock = pygame.time.Clock()
         self.active = True
+
+        #game state
+        self.game_state = "main_menu"
+        self.selected_mode = None
+
+        self.factory = SpriteFactory()
+
+        self.background = None
+        self.flyer = None
+        self.score = 0
+        self.active = False
 
         #sprite groups
         self.all_sprites = pygame.sprite.Group()
         self.collision_sprites = pygame.sprite.Group()
-
-        #sprite setup
-        Background(self.all_sprites)
-        self.witch = Witch(self.all_sprites)
 
         #timer
         self.obstacle_timer = pygame.USEREVENT + 1
@@ -29,16 +37,36 @@ class Game:
         self.start_offset = 0
 
         #menu
-        self.menu_surf = pygame.image.load('game_images/menu.png').convert_alpha()
-        self.menu_rect = self.menu_surf.get_rect(topleft=(0,0))
+        self.main_menu = menu.Menu(
+            self.display_surface,
+            ["Halloween", "Thanksgiving", "Christmas"],
+            title = "Fly Through The Holidays"
+        )
+
+    def menu_selection(self, event):
+        selected_mode = self.main_menu.input(event)
+        if selected_mode:
+            self.start_game(selected_mode)
+
+    def start_game(self, holiday):
+        self.game_state = "game"
+        self.selected_mode = holiday
+        self.active = True
+        self.score = 0
+
+        self.all_sprites.empty()
+        self.collision_sprites.empty()
+
+        self.background = self.factory.create_background(self.all_sprites, holiday)
+        self.flyer = self.factory.create_flyer(self.all_sprites, holiday)
 
     def collisions(self):
-        if pygame.sprite.spritecollide(self.witch, self.collision_sprites, False,pygame.sprite.collide_mask)\
-                or self.witch.rect.bottom > settings.WINDOW_HEIGHT or  self.witch.rect.bottom < 0:
+        if pygame.sprite.spritecollide(self.flyer, self.collision_sprites, False,pygame.sprite.collide_mask)\
+                or self.flyer.rect.bottom > settings.WINDOW_HEIGHT or  self.flyer.rect.bottom < 0:
             for sprite  in self.collision_sprites.sprites():
                 sprite.kill()
             self.active = False
-
+            self.game_state = "main_menu"
 
     def display_score(self):
         if self.active:
@@ -61,30 +89,23 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        if self.active:
-                            self.witch.move_up()
-                        else:
-                            self.witch.kill()
-                            self.witch = Witch(self.all_sprites)
-                            self.active = True
-                            self.start_offset = pygame.time.get_ticks()
-                if event.type == self.obstacle_timer and self.active:
-                    Obstacle([self.all_sprites, self.collision_sprites])
+                if self.game_state == "main_menu":
+                    self.menu_selection(event)
+                elif self.game_state == "game":
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and self.active:
+                        self.flyer.move_up()
+                    if event.type == self.obstacle_timer and self.active:
+                        self.factory.create_obstacle([self.all_sprites, self.collision_sprites],self.selected_mode)
 
 
             #game logic
-            self.all_sprites.update(delta_time)
-            self.collisions()
-            self.all_sprites.draw(self.display_surface)
-
-
-            if self.active:
+            if self.game_state == "main_menu":
+                self.main_menu.menu()
+            elif self.game_state == "game":
+                self.all_sprites.update(delta_time)
                 self.collisions()
-            else:
-                self.display_surface.blit(self.menu_surf, self.menu_rect)
-            self.display_score()
+                self.all_sprites.draw(self.display_surface)
+                self.display_score()
             pygame.display.update()
             self.clock.tick(settings.FRAMERATE)
 
