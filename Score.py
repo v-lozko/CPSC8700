@@ -24,7 +24,10 @@ class Score:
     def get_prev_score(self):
         return self._prev_score
 
-    def increase_score(self, points):
+    def set_score(self, points):
+        self.set_prev_score(points)
+        if(points > self._high_score):
+            self.set_high_score(points)
         self._score = points
 
     def set_high_score(self, points):

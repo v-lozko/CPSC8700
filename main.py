@@ -78,7 +78,7 @@ class Game:
 
     def display_score(self):
         if self.active:
-            score.increase_score((pygame.time.get_ticks()-self.start_offset)//100)
+            score.set_score((pygame.time.get_ticks()-self.start_offset)//100)
             self.score = score.get_score()
             y = settings.WINDOW_HEIGHT/10
         else:
