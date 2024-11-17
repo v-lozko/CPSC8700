@@ -2,10 +2,12 @@ import pygame, sys, time
 from sprites import SpriteFactory
 import settings
 import menu
+from Score import Score
 
-
+score = Score.get_instance()
 class Game:
     def __init__(self):
+        score.reset_score()
         pygame.init() #initializes all the pygame modules
         self.display_surface = pygame.display.set_mode((settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT))
         pygame.display.set_caption('Flying Through the Holidays')
@@ -52,7 +54,8 @@ class Game:
         self.game_state = "game"
         self.selected_mode = holiday
         self.active = True
-        self.score = 0
+        score.reset_score()
+        self.score = score.get_score()
 
         self.all_sprites.empty()
         self.collision_sprites.empty()
@@ -60,17 +63,23 @@ class Game:
         self.background = self.factory.create_background(self.all_sprites, holiday)
         self.flyer = self.factory.create_flyer(self.all_sprites, holiday)
 
+        self.start_offset = pygame.time.get_ticks()
+
     def collisions(self):
         if pygame.sprite.spritecollide(self.flyer, self.collision_sprites, False,pygame.sprite.collide_mask)\
                 or self.flyer.rect.bottom > settings.WINDOW_HEIGHT or  self.flyer.rect.bottom < 0:
             for sprite  in self.collision_sprites.sprites():
                 sprite.kill()
             self.active = False
+            score.reset_score()
+            self.score = score.get_score()
             self.game_state = "main_menu"
+            self.start_offset = pygame.time.get_ticks()
 
     def display_score(self):
         if self.active:
-            self.score = (pygame.time.get_ticks()-self.start_offset)//100
+            score.increase_score((pygame.time.get_ticks()-self.start_offset)//100)
+            self.score = score.get_score()
             y = settings.WINDOW_HEIGHT/10
         else:
             y = settings.WINDOW_HEIGHT*.75
