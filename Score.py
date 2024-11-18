@@ -32,7 +32,8 @@ class Score:
         self._score = points
 
     def through_seasons_score(self):
-        self._through_seasons_score = self._prev_score + self._through_seasons_score
+        self._through_seasons_score += self._score
+        self._score = 0
         return self._through_seasons_score
 
     def set_high_score(self, points):

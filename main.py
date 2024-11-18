@@ -54,8 +54,7 @@ class Game:
                 self.start_game(i)
                 self.game_running()
                 score.through_seasons_score()
-                score.set_score(score.through_seasons_score())
-                score.reset_score()
+            score.set_score(score.through_seasons_score())
 
         if selected_mode in ["Halloween", "Thanksgiving", "Christmas"]:
             waiting = waiting_screen(self.display_surface, selected_mode)
@@ -63,9 +62,7 @@ class Game:
             waiting.waiting()
             self.start_game(selected_mode)
             self.game_running()
-
-
-
+        score.reset_score()
 
     def start_game(self, holiday):
         self.start_offset = pygame.time.get_ticks()
@@ -91,13 +88,13 @@ class Game:
 
     def display_score(self):
         if self.game_state == "game":
-            score.set_score((pygame.time.get_ticks()-self.start_offset)//100)
+            score.set_score(((pygame.time.get_ticks()-self.start_offset)//100))
             self.score = score.get_score()
             y = settings.WINDOW_HEIGHT/10
         else:
             y = settings.WINDOW_HEIGHT*.75
 
-        score_surf = self.font.render(str(self.score), True, 'gray')
+        score_surf = self.font.render(str(self.score), True, 'black')
         score_rect = score_surf.get_rect(midtop = (settings.WINDOW_WIDTH/2, y))
         self.display_surface.blit(score_surf, score_rect)
 
