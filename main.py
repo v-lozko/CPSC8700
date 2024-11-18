@@ -56,6 +56,8 @@ class Game:
         self.active = True
         score.reset_score()
         self.score = score.get_score()
+        self.thanks_switch = False
+        self.christmas_switch = False
 
         self.all_sprites.empty()
         self.collision_sprites.empty()
@@ -68,7 +70,7 @@ class Game:
     def collisions(self):
         if pygame.sprite.spritecollide(self.flyer, self.collision_sprites, False,pygame.sprite.collide_mask)\
                 or self.flyer.rect.bottom > settings.WINDOW_HEIGHT or  self.flyer.rect.bottom < 0:
-            for sprite  in self.collision_sprites.sprites():
+            for sprite in self.collision_sprites.sprites():
                 sprite.kill()
             self.active = False
             score.reset_score()
@@ -105,6 +107,22 @@ class Game:
                         self.flyer.move_up()
                     if event.type == self.obstacle_timer and self.active:
                         self.factory.create_obstacle([self.all_sprites, self.collision_sprites],self.selected_mode)
+                    if score.get_score() >= 300 and not self.thanks_switch:
+                        self.thanks_switch = True
+                        self.holiday = "Thanksgiving"
+                        self.selected_mode = "Thanksgiving"
+                        for sprite in self.collision_sprites.sprites():
+                            sprite.kill()
+                        self.background = self.factory.create_background(self.all_sprites, self.holiday)
+                        self.flyer = self.factory.create_flyer(self.all_sprites, self.holiday)
+                    if score.get_score() >= 600 and not self.christmas_switch:
+                        self.christmas_switch = True
+                        self.holiday = "Christmas"
+                        self.selected_mode = "Christmas"
+                        for sprite in self.collision_sprites.sprites():
+                            sprite.kill()
+                        self.background = self.factory.create_background(self.all_sprites, self.holiday)
+                        self.flyer = self.factory.create_flyer(self.all_sprites, self.holiday)
 
 
             #game logic
