@@ -12,7 +12,8 @@ class Score:
             return
         self._initialized = True
         self._score = 0
-        self._high_score = 0 
+        self._high_score = 0
+        self._through_seasons_score = 0
         self._prev_score = 0
 
     def get_score(self):
@@ -30,6 +31,10 @@ class Score:
             self.set_high_score(points)
         self._score = points
 
+    def through_seasons_score(self):
+        self._through_seasons_score = self._prev_score + self._through_seasons_score
+        return self._through_seasons_score
+
     def set_high_score(self, points):
         self._high_score = points
 
@@ -38,3 +43,4 @@ class Score:
 
     def reset_score(self):
         self._score = 0
+        self._through_seasons_score = 0
