@@ -14,7 +14,6 @@ class Obstacle(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(midtop = (x,y))
         self.pos = pygame.math.Vector2(self.rect.topleft)
 
-        #mask
         self.mask = pygame.mask.from_surface(self.image)
 
     def update(self, delta_time):
