@@ -2,7 +2,6 @@ import pygame
 import settings
 import sys
 
-
 class waiting_screen:
     def __init__(self, screen, holiday):
         self.screen = screen
